@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>JS IN DEPTH</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+     <!-- Compiled and minified CSS -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+     <!-- Compiled and minified JavaScript -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+     <script src="./LocalStorage.js"></script>
+</head>
+<body>
+    <div class="container">
+    <h2>create event</h2>
+    <form class="col s6" id="createEventForm" action="#" >
+      <div class="row">
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="eventName" type="text" class="validate" required="" aria-required="true">
+          <label for="eventName">event Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <p>
+            <label>
+                <input id="isNsfw" type="checkbox" />
+                <span>Not appropriate for people under 18</span>
+            </label>
+        </p>
+      </div>
+      <div class="row">
+        <button class="btn waves-effect waves-light" onclick="EventOrganiser.createEvent(event)" type="submit" name="action">Submit
+        </button>
+      </div>
+      </div>
+    </form>
+  </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

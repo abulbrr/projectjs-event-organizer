@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <title>Events</title>
+    <script src="./LocalStorage.js"></script>
+    <script src="./HTMLCreator.js"></script>
+    
+</head>
+<body>
+    <div class="container">
+        <h2>Events</h2>
+        <ul id="Events"class="collection">
+
+        </ul>
+
+    </div>
+
+
+    <script>
+    var EventsList = JSON.parse(localStorage.getItem('EventsList'));
+    
+    for(var i = 0 ; i < EventsList.length; ++i)
+    {
+        createEventTemplate(EventsList[i], i)
+    }
+    
+    console.log('EventsList: ', EventsList);
+    function $(element) {
+        return document.querySelector(element);
+    }
+    function createEventTemplate(element, index){
+        
+        $("#Events").innerHTML += "<li id='li"+index+"' class='collection-item'></>" 
+        
+        HTMLCreator.createElement({ type:"p", text:"id: "+element.uuid },document.querySelector('#li'+index));
+        HTMLCreator.createElement( {type:"p", text:"is NSFW: "+ element.isNsfw },document.querySelector('#li'+index));
+        HTMLCreator.createElement({ type:"p", text:"Name: "+ element.name },document.querySelector('#li'+index));
+        $("#li"+index).innerHTML+= "<button id='"+element.uuid+"' onclick='removeItem(this.id)' class='material-icons'>delete</button> <hr>"
+    }
+
+
+
+    function removeItem(uuid) {
+        LocalStorage.removeEvent(uuid, () => {
+            alert("deleting items: sucess")
+            window.location.reload(true);
+
+        })
+    }
+
+
+        </script>
+</body>
+</html>
