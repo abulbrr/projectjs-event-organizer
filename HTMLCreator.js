@@ -10,7 +10,7 @@ var HTMLCreator = {
         newElement = document.createElement(element.type);
         newElement.id = element.id;
         newElement.class = element.class;  
-        var t = document.createTextNode(element.text);       // Create a text node
+        var t = document.createTextNode(element.text);
         newElement.appendChild(t);                     
         body.appendChild(newElement);                 
     }

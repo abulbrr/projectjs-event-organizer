@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>LOGIN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="./LocalStorage.js"></script>
+</head>
+
+<body>
+    <nav>
+
+        <div class="nav-wrapper teal darken-4">
+            <a href="#" class="brand-logo center">projectjs-event-organizer</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a href="./Events.html">Events</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <form class="col s6" id="createEventForm" action="#">
+        <div class="container">
+            <h2>Log in</h2>
+            <form class="col s6" id="createEventForm" action="#">
+                <div class="row">
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="username" type="text" class="validate" required="" aria-required="true">
+                        <label for="username">Name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="password" type="password" class="validate" required="" aria-required="true">
+                        <label for="password">password</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light" onclick="login(event)" type="submit" name="action">Submit
+                    </button>
+                </div>
+                <div class="row">
+                    <a href="./createClient.html">Create account?</a>
+                </div>
+        </div>
+        </form>
+        </div>
+
+        <script>
+            function login(Event) {
+                event.preventDefault()
+                var form = document.querySelector("#createEventForm");
+                let username = form.elements['username'].value
+                let password = form.elements['password'].value
+                if (username === "" || password === "") {
+                    alert("empty event name! Please try again")
+                    return;
+                }
+                let ClientsList = LocalStorage.getClients();
+
+                let client = CollectionUtils.find(ClientsList, (c) => {
+                    
+                    console.log(c)
+                    
+                    return (c.name == username && c.password == password)
+                })
+
+                if (client == false) {
+                    alert("wrong usernmae or password")
+                    return
+                }
+
+                LocalStorage.login(client.uuid)
+                alert("logged in sucessful")
+                window.location.href = './events.html'
+            }
+        </script>
+
+</body>
+
+</html>

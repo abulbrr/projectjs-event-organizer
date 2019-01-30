@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Create Client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="./LocalStorage.js"></script>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">projectjs-event-organizer</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a href="./Events.html">Events</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>Sign up</h2>
+        <form class="col s6" id="createEventForm" action="#">
+            <div class="row">
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="username" type="text" class="validate" required="" aria-required="true">
+                    <label for="username">Name</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="password" type="password" class="validate" required="" aria-required="true">
+                    <label for="password">password</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="age" type="number" class="validate" min="0" required="" aria-required="true">
+                    <label for="age">Age</label>
+                </div>
+            </div>
+            <div class="row">
+                <p>
+                    <label>
+                        <input name="male" type="radio" checked />
+                        <span>Male</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input name="female" type="radio" />
+                        <span>Female</span>
+                    </label>
+                </p>
+                <p>
+            </div>
+            <div class="row">
+                <button class="btn waves-effect waves-light" onclick="EventOrganiser.createClient(event)" type="submit" name="action">Submit
+                </button>
+            </div>
+            <div class="row">
+                    <a href="./login.html">already have an account?</a>
+                </div>
+    </div>
+    </form>
+    </div>
+
+    <script src="./createClient.js"></script>
+</body>
+
+</html>
