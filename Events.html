@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <title>Events</title>
     <script src="./LocalStorage.js"></script>
-    <script src="./HTMLCreator.js"></script>
+    <script src="./HtmlCreator.js"></script>
 
 </head>
 
@@ -18,7 +18,7 @@
     <nav>
         <div class="nav-wrapper green">
             <a href="./Events.html" class="brand-logo center">projectjs-event-organizer</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <ul id="nav-mobile" class="right">
                 <li>
                     <a href="./createEvent.html">Create Event</a>
                 </li>
@@ -40,31 +40,50 @@
 
 
     <script>
-        var EventsList = JSON.parse(localStorage.getItem('EventsList'));
+        var EventsList = LocalStorage.getEvents();
 
-        for (var i = 0; i < EventsList.length; ++i) {
-            createEventTemplate(EventsList[i], i)
-        }
+        // console.log(EventsList)
+        // CollectionUtils.forEach( EventsList, (element, i) => { 
+        //     renderEvent(element, i)
+        //  })
+
+         for (let index = 0; index < EventsList.length; index++) {
+             const event = EventsList[index];
+             renderEvent(event, index)
+             
+         }
 
         console.log('EventsList: ', EventsList);
-        function $(element) {
-            return document.querySelector(element);
+        function $(query) {
+            return document.querySelector(query);
         }
-        function createEventTemplate(element, index) {
 
-            $("#Events").innerHTML += "<li id='li" + index + "' class='collection-item'></>"
+        function renderEvent(event, index) {
 
-            HTMLCreator.createElement({ type: "h4", text: "Name: " + element.name }, document.querySelector('#li' + index));
-            HTMLCreator.createElement({ type: "p", text: "id: " + element.uuid }, document.querySelector('#li' + index));
-            HTMLCreator.createElement({ type: "p", text: "is NSFW: " + element.isNsfw }, document.querySelector('#li' + index));
-            $("#li" + index).innerHTML += "<button id='" + element.uuid + "' onclick='removeItem(this.id)' class='material-icons'>delete</button>" +
-                "<button id='" + element.uuid + "' onclick='AddClientToEvent(this.id)' class='material-icons'>event_available</button>< ul id = 'dropdown1' class='dropdown-content' >"
-                console.log(element.atendees)
-                CollectionUtils.forEach( element.atendees, (client)=> {
-                    $("#li" + index).innerHTML += "<li><a>"+ client.name+"</a></li>"
-                })
+            const card = HtmlCreator.createElement('div', {class: 'card'})
+            const cardContent = HtmlCreator.createElement('div', {class: 'card-content'})
+            const li = HtmlCreator.createElement( 'li', {id: 'li' + index, class: 'collection-item'})
+
+            $('#Events').appendChild(card)
+            card.appendChild(cardContent)
+            cardContent.appendChild(li)
+
+            li.appendChild( HtmlCreator.createElement('h4', {}, "Name: "+ event.name) )
+            li.appendChild( HtmlCreator.createElement('p', {}, "id: "+ event.uuid) )
+            li.appendChild( HtmlCreator.createElement('p', {}, "is nsfw: "+ event.isNsfw) )
+
+            li.appendChild( HtmlCreator.createElement('button', {
+                        eventId: event.uuid,
+                        onClick: 'removeItem(eventId)',
+                        class: 'material-icons'  },
+                        'delete'))
+            
+            li.appendChild( HtmlCreator.createElement('button', {
+            eventId: event.uuid,
+            onClick: 'AddClientToEvent(this.eventId)',
+            class: 'material-icons'  },
+            'event_available'))
                     
-                "</ul >"
         }
 
 
@@ -85,11 +104,12 @@
 
             let user = LocalStorage.getLoggedInUser();
 
-            if (user = undefined) {
+            if (user == undefined) {
                 alert("problem getting the user")
                 return
             }
-
+            console.log('add client to event')
+            console.log(user)
             LocalStorage.addClientToEvent(user, eventUuid)
 
 

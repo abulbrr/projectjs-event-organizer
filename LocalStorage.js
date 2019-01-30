@@ -1,12 +1,11 @@
 var CollectionUtils = {}
-
 CollectionUtils.forEach = function(collection, callback) {
     if(collection.length == 0)
         return;
     if(!collection instanceof array)
         for (let index = 0; index < array.length; index++) {
             const element = array[index];
-            callback(element, array, i)         
+            callback(element,i)         
         }
 }
 
@@ -42,27 +41,29 @@ CollectionUtils.map  = function(collection, callback) {
 
 var LocalStorage = {
     login: function( uuid ) {
-        localStorage.setItem('user', JSON.stringify(uuid));
+        localStorage.setItem('user', uuid);
     },
     getLoggedInUser: function() {
         let userId = localStorage.getItem('user');
-        ClientsList = this.getClients();
 
+        ClientsList = this.getClients();
         let user = CollectionUtils.find( ClientsList, (client) => {
-            client.uuid == userId;
+            return (client.uuid == userId);
         })
         if( user != false )
             return user
+        else
+            alert('logged in user not found')
     },
     isUserLoggedIn: function() {
-        let user =  LocalStorage.getItem('user');
+        let user =  localStorage.getItem('user');
         return (user != "" && user != null)
     },
     logout: function() {
         localStorage.setItem('user', '');
     },
     addEvent: function (item , success, err) {
-        LocalStorage.getEvents();
+        EventsList = LocalStorage.getEvents();
         EventsList.push(item)
         LocalStorage.saveEvents();
         success()
@@ -72,18 +73,31 @@ var LocalStorage = {
         ClientsList = this.getClients()
         ClientsList.push(client);
         this.saveClients();
-        callback();
     },
 
     addClientToEvent: function( client, eventUuid )
     {
         var event = CollectionUtils.find( EventsList, (element) => { 
-            alert( element.uuid )
-            return element == eventUuid 
+            return element.uuid == eventUuid 
         })
-        event.atendees.add( clientUuid )
-        this.addClient( client )
-        this.updateEvent(event)
+
+        if(event == false)
+        {
+            console.log('EVENT IS FALSE')
+        }
+        let isAlreatAttending = CollectionUtils.find( event.atendees, (atendee) => {
+            return atendee == client.uuid
+        } )
+
+        if(isAlreatAttending != false)
+        {
+            console.log('already attending!')
+            return;
+        }
+
+        event.atendees.push( client.uuid )
+        this.updateEvent(event);
+
     },
 
     removeEvent: function(uuid, callback) {
@@ -109,14 +123,20 @@ var LocalStorage = {
         EventsList = JSON.parse(localStorage.getItem('EventsList'));
 
         if(EventsList == null)
+        {
+            console.log('there are no clients returning empty array ')
             return []
+        }
         return EventsList;
     },
     getClients: function() {
-        ClientsList = JSON.parse(localStorage.getItem('ClientsList'));
+        ClientsList = JSON.parse(localStorage.getItem('ClientList'));
         if(ClientsList == null)
+        {
+            console.log('there are no clients returning empty array')
             return []
-
+        }
+        console.log('ClientsList:' + ClientsList)
         return ClientsList
     },
     saveEvents: function() {
@@ -124,12 +144,16 @@ var LocalStorage = {
         this.getEvents()
     },
     saveClients: function() {
-        localStorage.setItem('ClientsList', JSON.stringify(ClientsList));
+        localStorage.setItem('ClientList', JSON.stringify(ClientsList));
         this.getClients()
     },
     updateEvent: function(item) {
-        getEvents();
-        EventsList.filter( i => i.uuid == item.uuid ) = item;
+        this.getEvents();
+        let event = CollectionUtils.find( EventsList, (event) => {
+            return event.uuid == item.uuid
+        })
+        EventsList.splice(event,1)
+        EventsList.push(item)
         this.saveEvents();
     }
 }

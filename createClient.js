@@ -18,10 +18,10 @@ var EventOrganiser = {
         
         let innerEvent =  {
             uuid      : Math.random().toString(36).substr(2, 16),
-            username      : form.elements['username'].value,
+            username  : form.elements['username'].value,
             password  : form.elements['password'].value,
             age       : form.elements['age'].value,
-            sex       : form.elements['female'].checked ? 'female' : "male",
+            sex       : form.elements['sex'].value,
             events: []
         }
         LocalStorage.addClient( innerEvent , 
@@ -29,12 +29,8 @@ var EventOrganiser = {
             window.location.href = './events.html'}, 
            err    =  () => { alert("failed")}
         )
-        var retrievedObject = localStorage.getItem('ClientsList');
+
+        var retrievedObject = LocalStorage.getClients();
         
     },
 }
-
-
-
-
-ClientsList = LocalStorage.getClients()
