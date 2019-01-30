@@ -63,7 +63,7 @@
                     return;
                 }
                 let ClientsList = LocalStorage.getClients();
-
+                console.log(ClientsList)
                 let client = CollectionUtils.find(ClientsList, (c) => {                    
                     return (c.username == username && c.password == password)
                 })

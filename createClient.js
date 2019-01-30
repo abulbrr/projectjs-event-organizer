@@ -22,6 +22,7 @@ var EventOrganiser = {
             password  : form.elements['password'].value,
             age       : form.elements['age'].value,
             sex       : form.elements['sex'].value,
+            wallet    : 1000,
             events: []
         }
         LocalStorage.addClient( innerEvent , 

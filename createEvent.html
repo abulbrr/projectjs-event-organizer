@@ -1,55 +1,67 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Create Event</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-     <!-- Compiled and minified CSS -->
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
-     <!-- Compiled and minified JavaScript -->
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-     <script src="./LocalStorage.js"></script>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Create Event</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="./LocalStorage.js"></script>
 </head>
+
 <body>
-    <nav>
-        <div class="nav-wrapper">
-          <a href="#" class="brand-logo center">projectjs-event-organizer</a>
-          <ul id="nav-mobile" class="right ">
-            <li><a href="./Events.html">Events</a></li>
-            <!-- <li><a href="badges.html">Components</a></li>
-            <li><a href="collapsible.html">JavaScript</a></li> -->
-          </ul>
-        </div>
-      </nav>
-    <div class="container">
-    <h2>create event</h2>
-    <form class="col s6" id="createEventForm" action="#" >
+  <nav>
+    <div class="nav-wrapper">
+      <a href="./Events.html" class="brand-logo center">projectjs-event-organizer</a>
+      <ul id="nav-mobile" class="right ">
+        <li>
+          <a href="./Events.html">Events</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <h2>Create Event</h2>
+    <form class="col s6" id="createEventForm" action="#">
       <div class="row">
       </div>
       <div class="row">
         <div class="input-field col s6">
           <input id="eventName" type="text" class="validate" required="" aria-required="true">
-          <label for="eventName">event Name</label>
+          <label for="eventName">Event Name</label>
+        </div>
+      </div>
+      <div class="row">
+          <div class="input-field col s6">
+            <input id="eventPrice" type="number" class="validate">
+            <label for="eventPrice">Event Price</label>
+          </div>
+        </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="date" type="date" class="validate" required="" aria-required="true">
+          <label for="date">Eate</label>
         </div>
       </div>
       <div class="row">
         <p>
-            <label>
-                <input id="isNsfw" type="checkbox" />
-                <span>Not appropriate for people under 18</span>
-            </label>
+          <label>
+            <input id="isNsfw" type="checkbox" />
+            <span>Not appropriate for people under 18</span>
+          </label>
         </p>
       </div>
       <div class="row">
         <button class="btn waves-effect waves-light" onclick="EventOrganiser.createEvent(event)" type="submit" name="action">Submit
         </button>
       </div>
-      </div>
-    </form>
+  </div>
+  </form>
   </div>
 
-    <script src="./createEvent.js"></script>
+  <script src="./createEvent.js"></script>
 </body>
+
 </html>

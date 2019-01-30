@@ -14,17 +14,21 @@ var EventOrganiser = {
             alert("empty event name! Please try again")
             return;
         }
-        
+        let priceValue = form.elements['eventPrice'].value
+        priceValue = (priceValue == '') ? 0 : priceValue
         let innerEvent =  {
             uuid      : Math.random().toString(36).substr(2, 16),
             name      : form.elements['eventName'].value,
             isNsfw    : form.elements['isNsfw'].checked,
+            date      : form.elements['date'].value,
+            price     : priceValue,
             atendees: []
         }
         LocalStorage.addEvent( innerEvent , 
            sucess = () => { alert("You have sucessfully created an event"), 
            err    =  () => { alert("failed")}}
         )
+        window.location.href = './events.html'
         var retrievedObject = localStorage.getItem('EventsList');
         
     },
