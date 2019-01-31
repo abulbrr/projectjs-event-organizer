@@ -27,7 +27,7 @@ var EventOrganiser = {
         }
         LocalStorage.addClient( innerEvent , 
            sucess = () => { alert("You have sucessfully created an account")
-            window.location.href = './events.html'}, 
+            window.location.href = './index.html'}, 
            err    =  () => { alert("failed")}
         )
 

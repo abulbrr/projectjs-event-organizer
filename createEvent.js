@@ -28,7 +28,7 @@ var EventOrganiser = {
            sucess = () => { alert("You have sucessfully created an event"), 
            err    =  () => { alert("failed")}}
         )
-        window.location.href = './events.html'
+        window.location.href = './index.html'
         var retrievedObject = localStorage.getItem('EventsList');
         
     },
