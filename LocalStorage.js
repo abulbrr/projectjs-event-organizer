@@ -124,8 +124,14 @@ var LocalStorage = {
             return
         }
         ClientsList = this.getClients()
+        if(ClientsList.indexOf(client) != -1)
+        {
+            alert('account already registered!')
+            return;
+        }
         ClientsList.push(client);
         this.saveClients();
+        callback();
     },
 
     addClientToEvent: function (client, eventUuid) {
@@ -148,7 +154,7 @@ var LocalStorage = {
             console.log('event is nsfw You cant attend it yet try again after ' + (18 - client.age) + ' years :)')
             return;
         }
-        let isVip = client.events.length % 5 == 0 ? true : false 
+        let isVip = ((client.events.length >= 5) && (client.events.lenth % 5 == 0))? true : false 
         if( !isVip && client.wallet < event.price )
         {
             alert('You dont have enough money to attend the event')
@@ -159,21 +165,19 @@ var LocalStorage = {
             console.log('already attending!')
             return;
         }
-        console.log('sucessfully added client to event')
         if(!isVip)
         {
             client.wallet -= event.price
         }
         else
         {
+            client.
             alert('you are a vip client you will go to this event for free :D')
         }
         event.atendees.push(client.uuid)
         client.events.push(event.uuid)
-
-        console.log(client)
-        console.log(event.price)
-
+        
+        console.log('sucessfully added client to event')
         this.updateClients(client)
         this.updateEvent(event);
 
