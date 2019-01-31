@@ -146,6 +146,10 @@ var LocalStorage = {
         if (event == false) {
             console.log('EVENT IS FALSE')
         }
+        if(event.archived == true) {
+            alert("This must be disabled :/, The event is archived, no attendees can be added")
+            return
+        }
         let isAlreatAttending = CollectionUtils.find(event.atendees, (atendee) => {
             return atendee == client.uuid
         })

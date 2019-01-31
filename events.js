@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var instances = M.FormSelect.init(elems, options);
 });
 var EventsList = LocalStorage.getEvents();
+
+function filterClicked(e) {
+    e.preventDefault()
+    render()
+}
 render();
 function render(criteria = '') {
     $('#Events').innerHTML = ''
@@ -17,7 +22,7 @@ function render(criteria = '') {
                 console.log(element.name == value)
                 return element.name == value
             })
-            if (temp != false) { 
+            if (temp != false) {
                 list = []
                 list.push(temp)
             }
@@ -35,12 +40,33 @@ function render(criteria = '') {
 
         console.log(list)
     }
+    let filter = $('#filterForm').elements['filter'].value;
+    console.log(filter)
+    switch (filter) {
+        case 'nsfw':
+            list = CollectionUtils.filter(list, (element) => {
+                return element.isNsfw == true
+            })
+            break;
+        case 'sfw':
+            list = CollectionUtils.filter(list, (element) => {
+                return element.isNsfw == false
+            })
+            break;
+        case 'awaited':
+            list = CollectionUtils.filter(list, (element) => {
+                return element.atendees.length != 0
+            })
+            break;
+        case 'archived':
+            list = CollectionUtils.filter(list, (element) => {
+                return element.archived == true
+            })
+            break;
 
-    if ($('#sfw').checked == true) {
-        console.log('is safe for work')
-        list = CollectionUtils.filter(list, (element) => {
-            return element.isNsfw == false
-        })
+        case 'all':
+        default:
+            break;
     }
 
     for (let index = 0; index < list.length; index++) {
@@ -55,6 +81,38 @@ function $(query) {
     return document.querySelector(query);
 }
 
+function ratingSubmitClicked(eventId) {
+    let ratingInput = $('#ratingInput' + eventId).value
+    console.log(ratingInput)
+    if(ratingInput > 10 || ratingInput < 1)
+    {
+        alert('Invalid rating please put a rating between 1 and 10')
+        return
+    }
+    let event = LocalStorage.getEventById(eventId)
+    let user = LocalStorage.getLoggedInUser()
+
+    let isUserAtendee = CollectionUtils.find( event.atendees, (atendee)=> {
+        return user.uuid == atendee
+    } )
+
+    if(isUserAtendee == false)
+    {
+        console.log('We are sorry, you are not attending this event, you can not rate it')
+        return
+    }
+
+    if(event == false)
+    {
+        console.log('error retrieving the event data')
+        return
+    }
+    
+    event.rating += 1000 +parseInt(ratingInput)
+    LocalStorage.updateEvent(event)
+    render()
+}
+
 function renderEvent(event, index) {
 
     const card = HtmlCreator.createElement('div', { class: 'card' })
@@ -66,46 +124,88 @@ function renderEvent(event, index) {
     cardContent.appendChild(li)
     let char = event.isNsfw ? '*' : '#'
     char += event.price == '' ? '!' : '$'
+    char += event.archived == true ? '~ ' : ' '
     li.appendChild(HtmlCreator.createElement('h4', {}, "Name: " + char + event.name))
     li.appendChild(HtmlCreator.createElement('p', {}, "id: " + event.uuid))
     li.appendChild(HtmlCreator.createElement('p', {}, "is nsfw: " + event.isNsfw))
     li.appendChild(HtmlCreator.createElement('p', {}, 'date: ' + event.date))
-    li.appendChild(HtmlCreator.createElement('p', {}, 'price: '+ event.price))
+    li.appendChild(HtmlCreator.createElement('p', {}, 'price: ' + event.price))
+    li.appendChild(HtmlCreator.createElement('p', {}, ' archived: ' + ((event.archived == true) ? 'true' : 'false')))
+
+    let rating = event.rating
+    if(rating != 0) {
+        let ratersCount = Math.floor(rating / 1000)
+        rating = Math.round((rating % 1000) / ratersCount)
+        rating = Math.round(rating / 10 * 6)
+
+    }
+    else {
+        rating = 'Rating not set yet and will be updated'
+    }
+    
+    li.appendChild(HtmlCreator.createElement('p', {}, ' rating: ' + rating))
+
+
+    if (event.archived == true)
+        li.appendChild(HtmlCreator.createElement('input', {
+            type: 'number',
+            id: 'ratingInput' + event.uuid,
+            placeholder: 'Rating',
+            min: '0', max: '10',
+            validate: 'true',
+        }))
+    li.appendChild(HtmlCreator.createElement('button', { class: 'btn', eventId: event.uuid, onClick: 'ratingSubmitClicked(this.eventId)' }, 'submit'))
+    li.appendChild(HtmlCreator.createElement('p', {}, ' clients paid: ' + ((event.atendees.length * event.price) + ' on this event')))
 
     li.appendChild(HtmlCreator.createElement('button', {
         eventId: event.uuid,
         onClick: 'removeItem(eventId)',
-        class: 'material-icons'
+        class: 'btn-small'
     },
         'delete'))
 
     li.appendChild(HtmlCreator.createElement('button', {
         eventId: event.uuid,
         onClick: 'AddClientToEvent(this.eventId)',
-        class: 'material-icons'
+        class: 'btn-small ' + (event.archived == true ? 'disabled' : null)
     },
-        'event_available'))
+        'add client to event'))
+
+    if (event.archived != true) {
+
+        li.appendChild(HtmlCreator.createElement('button', {
+            eventId: event.uuid,
+            onClick: 'archiveEvent(this.eventId)',
+            class: 'btn-small'
+        },
+            'archive'))
+    }
+
+    li.appendChild(HtmlCreator.createElement('br'))
 
     li.appendChild(HtmlCreator.createElement('button', {
         eventId: event.uuid,
         onClick: 'filterAtendees(this.eventId, "Female")',
-        class: 'material-icons'
+        class: 'btn-small'
     },
-        'pregnant_woman'))
+        'Women'))
 
     li.appendChild(HtmlCreator.createElement('button', {
         eventId: event.uuid,
         onClick: 'filterAtendees(this.eventId, "Male")',
-        class: 'material-icons'
+        class: 'material-icons',
+        class: 'btn-small'
     },
-        'face'))
+        'Men'))
 
     li.appendChild(HtmlCreator.createElement('button', {
         eventId: event.uuid,
         onClick: 'filterAtendees(this.eventId)',
-        class: 'material-icons'
+        class: 'btn-small'
     },
-        'sentiment_satisfied'))
+        'ALL Clients'))
+
+
 
     const ul = HtmlCreator.createElement('ul', { id: 'ul' + index })
     const atendeesli = HtmlCreator.createElement('li', { id: event.uuid + 'atendeesList' })
@@ -154,12 +254,13 @@ function filterAtendees(eventUuid, filter) {
 
     CollectionUtils.forEach(atendees, (atendee) => {
         const user = LocalStorage.getUserById(atendee)
-        let p = HtmlCreator.createElement('p', {}, 
-        'id: ' + user.uuid +
-        ' age: ' + user.age +
-        ' sex: ' + user.sex + 
-        ' wallet: ' + user.wallet +
-        ' attending events count: ' + user.events.length)
+        let p = HtmlCreator.createElement('p', {},
+            'id: ' + user.uuid +
+            ' age: ' + user.age +
+            ' sex: ' + user.sex +
+            ' wallet: ' + user.wallet +
+            ' attending events count: ' + user.events.length)
+
         let btn = HtmlCreator.createElement('button', {
             eventId: event.uuid,
             atendeeId: user.uuid,
@@ -167,11 +268,24 @@ function filterAtendees(eventUuid, filter) {
             class: 'material-icons'
         },
             'close')
-        
+
 
         atendeesList.appendChild(p)
         atendeesList.appendChild(btn)
     })
+}
+
+function archiveEvent(eventId) {
+    event = LocalStorage.getEventById(eventId)
+
+    if (event == undefined) {
+        console.log('Could not archive the event')
+        return
+    }
+
+    event.archived = true;
+    LocalStorage.updateEvent(event)
+    render()
 }
 
 function removeAtendee(eventId, userId) {

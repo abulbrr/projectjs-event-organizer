@@ -22,6 +22,7 @@ var EventOrganiser = {
             isNsfw    : form.elements['isNsfw'].checked,
             date      : form.elements['date'].value,
             price     : priceValue,
+            rating    : 0,
             atendees: []
         }
         LocalStorage.addEvent( innerEvent , 

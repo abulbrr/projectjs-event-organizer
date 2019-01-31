@@ -48,12 +48,41 @@
                 </label>
             </p>
             <br>
-            <p>
-                <label>
-                    <input onchange="render()" id="sfw" type="checkbox" />
-                    <span>safe for work</span>
-                </label>
-            </p>
+            <div class="column">
+                <form class="col s6" id="filterForm" action="#">
+                    <p>
+                        <label>
+                            <input name="filter" type="radio" value="all" checked />
+                            <span>ALL</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input name="filter" type="radio" value="sfw" />
+                            <span>SFW</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input name="filter" type="radio" value="nsfw" />
+                            <span>NSFW</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input name="filter" type="radio" value="awaited" />
+                            <span>awaited By Clients</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input name="filter" type="radio" value="archived" />
+                            <span>archived</span>
+                        </label>
+                    </p>
+                    <button class="btn" onclick="filterClicked(event)">filter</button>
+                </form>
+            </div>
         </div>
         <div class="column s-12">
             <input type="text" name="nameFilter" id="nameFilter" placeholder="filter by name">
